@@ -36,9 +36,4 @@ public class RoleService {
     public void removeRole(Role role) {
         roleRepository.delete(role);
     }
-
-    @Transactional(readOnly = true)
-    public Role findByName(String name) {
-        return roleRepository.findByName(name);
-    }
 }
