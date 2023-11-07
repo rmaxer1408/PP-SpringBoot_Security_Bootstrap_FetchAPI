@@ -35,11 +35,9 @@ public class AdminsRestController {
 
     @PostMapping()
     public ResponseEntity<HttpStatus> createUser(@RequestBody User user) {
-
         user.setRoles(userService.getUserRoles(user));
         userService.createUser(user);
         return ResponseEntity.ok(HttpStatus.CREATED);
-
     }
 
     @PatchMapping("/{id}")

@@ -110,6 +110,11 @@ public class User implements UserDetails {
         this.birthdate = birthdate;
     }
 
+    public int getAge() {
+        Period period = Period.between(birthdate, LocalDate.now());
+        return period.getYears();
+    }
+
     @Override
     public boolean isAccountNonExpired() {
         return true;
