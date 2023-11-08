@@ -11,6 +11,7 @@ import ru.kata.spring.boot_security.demo.util.UserErrorResponse;
 import ru.kata.spring.boot_security.demo.util.UserNotCreatedException;
 import ru.kata.spring.boot_security.demo.util.UserNotFoundException;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -21,6 +22,12 @@ public class AdminsRestController {
     @Autowired
     public AdminsRestController(UserService userService) {
         this.userService = userService;
+    }
+
+    @GetMapping("/admin")
+    public ResponseEntity<User> getPrincipal(Principal principal) {
+        User user = userService.findByUsername(principal.getName());
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
     @GetMapping()

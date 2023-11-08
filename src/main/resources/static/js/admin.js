@@ -7,15 +7,15 @@ function getData() {
 }
 
 function dataTable(users) {
-    let res = '';
+    let data = '';
     for (let user of users) {
-        res +=
+        data +=
             `<tr>
                 <td>${user.id}</td>
                 <td>${user.firstname}</td>
                 <td>${user.surname}</td>
                 <td>${user.email}</td>
-                <td id=${'role' + user.id}>${user.roles.map(r => r.name).join(' ')}</td>
+                <td id=${'role' + user.id}>${rolesToString(user.roles)}</td>
                 <td>
                     <button class="btn btn-primary" type="button"
                     data-bs-toggle="modal" data-bs-target="#edit-modal"
@@ -30,20 +30,20 @@ function dataTable(users) {
                 </td>
             </tr>`
     }
-    document.getElementById('tbody-users').innerHTML = res;
+    document.getElementById('tbody-users').innerHTML = data;
 }
 
 getData();
 
 document.getElementById('form-new-user').addEventListener('submit', (e) => {
     e.preventDefault()
-    let role = document.getElementById('select')
-    let rolesAddUser = []
-    let rolesAddUserValue = ''
-    for (let i = 0; i < role.options.length; i++) {
-        if (role.options[i].selected) {
-            rolesAddUser.push({id: role.options[i].value, name: 'ROLE_' + role.options[i].innerHTML})
-            rolesAddUserValue += role.options[i].innerHTML
+    let roleElement = document.getElementById('select')
+    let roles = []
+    let rolesValue = ''
+    for (let i = 0; i < roleElement.options.length; i++) {
+        if (roleElement.options[i].selected) {
+            roles.push({id: roleElement.options[i].value, name: 'ROLE_' + roleElement.options[i].innerHTML})
+            rolesValue += roleElement.options[i].innerHTML
         }
     }
     fetch(URL, {
@@ -58,7 +58,7 @@ document.getElementById('form-new-user').addEventListener('submit', (e) => {
             username: document.getElementById('username').value,
             email: document.getElementById('email').value,
             password: document.getElementById('password').value,
-            roles: rolesAddUser
+            roles: roles
         })
     })
         .then((response) => {
@@ -72,7 +72,7 @@ document.getElementById('form-new-user').addEventListener('submit', (e) => {
                 document.getElementById('username').value = ''
                 document.getElementById('email').value = ''
                 document.getElementById('password').value = ''
-                role.selectedIndex = -1
+                roleElement.selectedIndex = -1
             }
         })
 })
@@ -96,8 +96,6 @@ function editModal(id) {
                 document.getElementById('edit-email').value = u.email;
                 document.getElementById('edit-username').value = u.username;
                 document.getElementById('edit-password').value = u.password;
-                console.log(u.roles.map(r => r.id));
-                // TODO select roles
             })
         )
 
@@ -174,4 +172,39 @@ async function deleteUser() {
             closeModal()
             getData()
         })
+}
+
+const adminURL = 'http://localhost:8080/api/v1/users/admin';
+const adminBrand = document.getElementById('navbar-brand');
+const adminInfo = document.getElementById('principal-info');
+
+function getUserData() {
+    fetch(adminURL)
+        .then((res) => res.json())
+        .then((user) => {
+            let roles = rolesToString(user.roles);
+            let data = '';
+
+            data +=`<tr>
+                        <td>${user.id}</td>
+                        <td>${user.username}</td>
+                        <td>${user.surname}</td>
+                        <td>${user.birthdate}</td>
+                        <td>${user.email}</td>
+                        <td>${roles}</td>
+                   </tr>`;
+            adminInfo.innerHTML = data;
+            adminBrand.innerHTML = `<span>${user.email} with roles: ${roles}</span>`;
+        });
+}
+
+getUserData()
+
+function rolesToString(roles) {
+    let rolesString = '';
+
+    for (let role of roles) {
+        rolesString += (' ' + role.name.toString().replace('ROLE_', ''));
+    }
+    return rolesString;
 }

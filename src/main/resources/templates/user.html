@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Page</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+          crossorigin="anonymous">
+</head>
+<body>
+<header>
+    <nav class="navbar navbar-dark bg-dark">
+        <div class="container-fluid">
+            <div class="navbar-brand text-white" id="navbar-brand"></div>
+            <form class="d-flex" th:action="@{/logout}" method="post">
+                <button type="submit" class="btn btn-dark text-secondary">Logout</button>
+            </form>
+        </div>
+    </nav>
+</header>
+<div class="d-flex">
+    <div class="col-2">
+        <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+            <a class="nav-link active" id="v-pills-user-tab" data-bs-toggle="pill" data-bs-target="#v-pills-user"
+               type="button" role="tab" aria-controls="v-pills-user" aria-selected="true">User
+            </a>
+        </div>
+    </div>
+    <div class="container-fluid ps-0">
+        <div class="p-3 border bg-light">
+            <div class="col-md-auto">
+                <div class="tab-content" id="v-pills-tab-content">
+                    <div class="tab-pane show active fade" id="v-pills-user" role="tabpanel" aria-labelledby="v-pills-user-tab">
+                        <div class="row bg-light">
+                            <div class="fw-bold my-3">User Information Page</div>
+                        </div>
+                        <div class="row">
+                            <div class="my-4">
+                                <div class="p-3 border bg-light">About user</div>
+                                <table class="table table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th scope="col">ID</th>
+                                        <th scope="col">Firstname</th>
+                                        <th scope="col">Surname</th>
+                                        <th scope="col">Birthdate</th>
+                                        <th scope="col">Email</th>
+                                        <th scope="col">Role</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="principal-info"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous">
+</script>
+<script type="text/javascript" src="../static/js/user.js"></script>
+</body>
+</html>
