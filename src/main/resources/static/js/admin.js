@@ -36,14 +36,14 @@ function dataTable(users) {
 getData();
 
 document.getElementById('form-new-user').addEventListener('submit', (e) => {
-    e.preventDefault()
-    let roleElement = document.getElementById('select')
-    let roles = []
-    let rolesValue = ''
+    e.preventDefault();
+    let roleElement = document.getElementById('select');
+    let roles = [];
+    let rolesValue = '';
     for (let i = 0; i < roleElement.options.length; i++) {
         if (roleElement.options[i].selected) {
-            roles.push({id: roleElement.options[i].value, name: 'ROLE_' + roleElement.options[i].innerHTML})
-            rolesValue += roleElement.options[i].innerHTML
+            roles.push({id: roleElement.options[i].value, name: 'ROLE_' + roleElement.options[i].innerHTML});
+            rolesValue += roleElement.options[i].innerHTML;
         }
     }
     fetch(URL, {
@@ -63,22 +63,24 @@ document.getElementById('form-new-user').addEventListener('submit', (e) => {
     })
         .then((response) => {
             if (response.ok) {
-                getData()
-                document.getElementById("nav-user-table-tab").click()
+                getData();
+                document.getElementById("nav-user-table-tab").click();
 
-                document.getElementById('firstname').value = ''
-                document.getElementById('surname').value = ''
-                document.getElementById('birthdate').value = ''
-                document.getElementById('username').value = ''
-                document.getElementById('email').value = ''
-                document.getElementById('password').value = ''
-                roleElement.selectedIndex = -1
+                document.getElementById('firstname').value = '';
+                document.getElementById('surname').value = '';
+                document.getElementById('birthdate').value = '';
+                document.getElementById('username').value = '';
+                document.getElementById('email').value = '';
+                document.getElementById('password').value = '';
+                roleElement.selectedIndex = -1;
             }
         })
 })
 
 function closeModal() {
-    document.querySelectorAll(".btn-close").forEach((btn) => btn.click())
+    document.querySelectorAll(".btn-close").forEach(
+        (btn) => btn.click()
+    );
 }
 
 function editModal(id) {
@@ -87,18 +89,38 @@ function editModal(id) {
             'Content-Type': 'application/json;charset=UTF-8'
         }
     })
-        .then(res => res.json()
-            .then(u => {
-                document.getElementById('edit-id').value = u.id;
-                document.getElementById('edit-firstname').value = u.firstname;
-                document.getElementById('edit-surname').value = u.surname;
-                document.getElementById('edit-birthdate').value = u.birthdate;
-                document.getElementById('edit-email').value = u.email;
-                document.getElementById('edit-username').value = u.username;
-                document.getElementById('edit-password').value = u.password;
-            })
+        .then(
+            res => res.json()
         )
+        .then(u => {
+        document.getElementById('edit-id').value = u.id;
+        document.getElementById('edit-firstname').value = u.firstname;
+        document.getElementById('edit-surname').value = u.surname;
+        document.getElementById('edit-birthdate').value = u.birthdate;
+        document.getElementById('edit-email').value = u.email;
+        document.getElementById('edit-username').value = u.username;
+        document.getElementById('edit-password').value = u.password;
 
+        let rolesId = u.roles.map(r => r.id);
+        let select = document.getElementById('edit-roles');
+
+        for (let i = 0; i < select.options.length; i++) {
+            for (let r of rolesId) {
+                console.log(select.options[i].value == r);
+                if (rolesId.length == 2) {
+                    console.log(select.options.selectedIndex);
+                    select.options[0].selected = true;
+                    select.options[1].selected = true;
+                    break;
+                }
+                if (select.options[i].value == r) {
+                    select.options[i].selected = true;
+                } else {
+                    select.options[i].selected = false;
+                }
+            }
+        }
+    })
 }
 
 async function editUser() {
@@ -114,11 +136,10 @@ async function editUser() {
     for (let i = 0; i < form_ed.roles.options.length; i++) {
         if (form_ed.roles.options[i].selected) {
             let tmp = {};
-            tmp["id"] = form_ed.roles.options[i].value
+            tmp["id"] = form_ed.roles.options[i].value;
             listOfRole.push(tmp);
         }
     }
-    console.log(listOfRole);
     let user = {
         id: idValue,
         firstname: firstnameValue,
@@ -155,11 +176,29 @@ function deleteModal(id) {
             document.getElementById('delete-username').value = user.username;
             document.getElementById('delete-password').value = user.password;
             document.getElementById('delete-email').value = user.email;
+
+            let rolesId = user.roles.map(r => r.id);
+            let select = document.getElementById('delete-roles');
+
+            for (let i = 0; i < select.options.length; i++) {
+                for (let r of rolesId) {
+                    if (rolesId.length == 2) {
+                        select.options[0].selected = true;
+                        select.options[1].selected = true;
+                        break;
+                    }
+                    if (select.options[i].value == r) {
+                        select.options[i].selected = true;
+                    } else {
+                        select.options[i].selected = false;
+                    }
+                }
+            }
         });
 }
 
 async function deleteUser() {
-    const id = document.getElementById("delete-id").value
+    const id = document.getElementById("delete-id").value;
     let url = URL + "/" + id;
     let options = {
         method: 'DELETE',
@@ -168,9 +207,10 @@ async function deleteUser() {
         }
     }
     fetch(url, options)
-        .then(() => {
-            closeModal()
-            getData()
+        .then(
+            () => {
+                closeModal();
+                getData();
         })
 }
 
@@ -180,10 +220,13 @@ const adminInfo = document.getElementById('principal-info');
 
 function getUserData() {
     fetch(adminURL)
-        .then((res) => res.json())
-        .then((user) => {
-            let roles = rolesToString(user.roles);
-            let data = '';
+        .then(
+            (res) => res.json()
+        )
+        .then(
+            (user) => {
+                let roles = rolesToString(user.roles);
+                let data = '';
 
             data +=`<tr>
                         <td>${user.id}</td>
@@ -198,7 +241,7 @@ function getUserData() {
         });
 }
 
-getUserData()
+getUserData();
 
 function rolesToString(roles) {
     let rolesString = '';

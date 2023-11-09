@@ -1,4 +1,4 @@
-const userURL = 'http://localhost:8080/api/v1/users/user';
+const userURL = 'http://localhost:8080/api/v1/user';
 const userBrand = document.getElementById('navbar-brand');
 const userInfo = document.getElementById('principal-info');
 
