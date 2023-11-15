@@ -106,9 +106,7 @@ function editModal(id) {
 
         for (let i = 0; i < select.options.length; i++) {
             for (let r of rolesId) {
-                console.log(select.options[i].value == r);
                 if (rolesId.length == 2) {
-                    console.log(select.options.selectedIndex);
                     select.options[0].selected = true;
                     select.options[1].selected = true;
                     break;
@@ -230,7 +228,7 @@ function getUserData() {
 
             data +=`<tr>
                         <td>${user.id}</td>
-                        <td>${user.username}</td>
+                        <td>${user.firstname}</td>
                         <td>${user.surname}</td>
                         <td>${user.birthdate}</td>
                         <td>${user.email}</td>

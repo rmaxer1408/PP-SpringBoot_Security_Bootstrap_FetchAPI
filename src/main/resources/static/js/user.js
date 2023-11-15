@@ -11,7 +11,7 @@ function getUserData() {
 
             data +=`<tr>
                         <td>${user.id}</td>
-                        <td>${user.username}</td>
+                        <td>${user.firstname}</td>
                         <td>${user.surname}</td>
                         <td>${user.birthdate}</td>
                         <td>${user.email}</td>

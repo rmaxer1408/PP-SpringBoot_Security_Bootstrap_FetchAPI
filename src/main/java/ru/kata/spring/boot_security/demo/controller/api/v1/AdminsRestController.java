@@ -1,10 +1,9 @@
 package ru.kata.spring.boot_security.demo.controller.api.v1;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.service.UserService;
@@ -17,7 +16,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/users")
-@Secured("ROLE_ADMIN")
 public class AdminsRestController {
     private final UserService userService;
 
@@ -33,16 +31,19 @@ public class AdminsRestController {
     }
 
     @GetMapping()
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<List<User>> getUsers() {
         return new ResponseEntity<>(userService.getUserList(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<User> getUser(@PathVariable("id") int id) {
         return new ResponseEntity<>(userService.getUserById(id), HttpStatus.OK);
     }
 
     @PostMapping()
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<HttpStatus> createUser(@RequestBody User user) {
         user.setRoles(userService.getUserRoles(user));
         userService.createUser(user);
@@ -50,12 +51,14 @@ public class AdminsRestController {
     }
 
     @PatchMapping("/{id}")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<HttpStatus> updateUser(@PathVariable("id") int id, @RequestBody User user) {
         userService.updateUser(user);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<HttpStatus> deleteUser(@PathVariable("id") int id) {
         userService.deleteUser(id);
         return ResponseEntity.ok(HttpStatus.OK);
